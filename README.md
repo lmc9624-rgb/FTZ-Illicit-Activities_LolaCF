@@ -118,7 +118,7 @@
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.15s;
-    max-width: 230px;
+    max-width: 280px;
     line-height: 1.55;
     z-index: 10;
     box-shadow: var(--shadow-lg);
@@ -231,7 +231,7 @@
   </div>
 </div>
 
-<footer>Data sourced from open-source intelligence reports on illicit trade and financial crime networks.</footer>
+<footer>Data sourced from U.S. State Dept (INCSR), UNODC, FATF, FinCEN, U.S. Treasury (OFAC), DOJ, DEA, INTERPOL, TRACIT, and congressional records.</footer>
 
 <script>
 (function(){
@@ -252,27 +252,89 @@
 })();
 
 const zones = [
-  {name:"Colon Free Zone",lat:9.35,lon:-79.9,region:"carib",color:"#1D9E75",r:5.5,desc:"World's 2nd largest FTZ. Key transit for drugs, counterfeits. Bagdad & Calor Calor gangs operate nearby.",lx:10,ly:-10,anchor:"start"},
-  {name:"Margarita Island FTZ",lat:11.0,lon:-63.9,region:"carib",color:"#1D9E75",r:4.5,desc:"Venezuelan free port. Hezbollah training operations reported. Maduro regime nexus.",lx:8,ly:-8,anchor:"start"},
-  {name:"Curacao FTZ",lat:12.17,lon:-68.98,region:"carib",color:"#1D9E75",r:4,desc:"Dutch Caribbean free zone. Hezbollah drug ring busted here in 2009.",lx:-8,ly:-10,anchor:"end"},
-  {name:"Trinidad & Tobago",lat:10.5,lon:-61.3,region:"carib",color:"#1D9E75",r:3.5,desc:"Point Lisas free zone. Caribbean transit hub for narcotics.",lx:8,ly:12,anchor:"start"},
-  {name:"Kingston FTZ",lat:17.97,lon:-76.79,region:"carib",color:"#1D9E75",r:4,desc:"Jamaica's main FTZ. Transshipment point for Caribbean drug trade.",lx:-8,ly:-8,anchor:"end"},
-  {name:"Manaus Free Zone",lat:-3.12,lon:-60.02,region:"latam",color:"#D85A30",r:4.5,desc:"Brazil's largest FTZ in the Amazon. Near Tri-Border Area networks.",lx:8,ly:-8,anchor:"start"},
-  {name:"Tri-Border Area",lat:-25.5,lon:-54.6,region:"latam",color:"#D85A30",r:5.5,desc:"Argentina-Brazil-Paraguay junction. Major Hezbollah fundraising & money laundering hub since 1980s.",lx:8,ly:4,anchor:"start"},
-  {name:"Iquique FTZ",lat:-20.21,lon:-70.15,region:"latam",color:"#D85A30",r:4,desc:"Chile's northern FTZ. Hezbollah money launderer Assad Barakat spotted here in 2024.",lx:-8,ly:4,anchor:"end"},
-  {name:"Buenaventura",lat:3.88,lon:-77.02,region:"latam",color:"#D85A30",r:4.5,desc:"Colombia's Pacific port. Key transit for Clan del Golfo cocaine & arms trafficking.",lx:-8,ly:4,anchor:"end"},
-  {name:"Cartagena FTZ",lat:10.39,lon:-75.51,region:"latam",color:"#D85A30",r:4,desc:"Colombia's Caribbean port zone. Drug trafficking & trade-based money laundering hub.",lx:-8,ly:4,anchor:"end"},
-  {name:"Lome Free Zone",lat:6.13,lon:1.22,region:"wafrica",color:"#534AB7",r:4.5,desc:"Togo's port zone. West African transit point. Lebanese diaspora fundraising networks.",lx:-8,ly:-10,anchor:"end"},
-  {name:"Lagos Free Zone",lat:6.45,lon:3.39,region:"wafrica",color:"#534AB7",r:5,desc:"Nigeria's commercial hub. Hezbollah & Lebanese diaspora networks active in West Africa.",lx:8,ly:12,anchor:"start"},
-  {name:"Dakar FTZ",lat:14.69,lon:-17.44,region:"wafrica",color:"#534AB7",r:4.5,desc:"Senegal's port zone. Significant Lebanese community. Drug transit point to Europe.",lx:8,ly:-10,anchor:"start"},
-  {name:"Abidjan FTZ",lat:5.36,lon:-4.01,region:"wafrica",color:"#534AB7",r:4.5,desc:"Ivory Coast. Over 100,000 Lebanese residents. Key Hezbollah fundraising territory.",lx:-8,ly:12,anchor:"end"},
-  {name:"Accra FTZ",lat:5.56,lon:-0.19,region:"wafrica",color:"#534AB7",r:3.5,desc:"Ghana's free zone. Growing role in West African trade corridors.",lx:8,ly:-4,anchor:"start"},
-  {name:"Port of Montreal",lat:45.5,lon:-73.56,region:"north",color:"#378ADD",r:5,desc:"Canada. Known Hezbollah vehicle smuggling route to Lebanon. $34.5M in stolen cars seized in 2024.",lx:8,ly:-10,anchor:"start"},
-  {name:"Halifax Port",lat:44.65,lon:-63.57,region:"north",color:"#378ADD",r:4,desc:"Canada. Identified as Hezbollah leadership cell location by DEA. $194M cocaine seizure in 2024.",lx:8,ly:6,anchor:"start"},
-  {name:"Miami FTZ",lat:25.76,lon:-80.19,region:"north",color:"#378ADD",r:4.5,desc:"US gateway to Latin America & Caribbean. Black market peso exchange hub.",lx:8,ly:-10,anchor:"start"},
-  {name:"Rotterdam Port",lat:51.92,lon:4.48,region:"north",color:"#378ADD",r:4,desc:"Europe's largest port. Major cocaine entry point from Latin America.",lx:8,ly:-8,anchor:"start"},
-  {name:"Port of Beirut",lat:33.9,lon:35.5,region:"mideast",color:"#D4537E",r:5,desc:"Lebanon. Hezbollah's home base. Destination for stolen vehicles, laundered funds & trade flows.",lx:8,ly:-10,anchor:"start"},
-  {name:"Dubai / Jebel Ali",lat:25.0,lon:55.1,region:"mideast",color:"#D4537E",r:4.5,desc:"UAE free zone. Global supercartel HQ. Major money laundering & gold trade nexus.",lx:8,ly:6,anchor:"start"},
+  {name:"Colon Free Zone",lat:9.35,lon:-79.9,region:"carib",color:"#1D9E75",r:5.5,
+    desc:"World's 2nd-largest FTZ (after Hong Kong). 2,500+ companies, $19B annual turnover. FinCEN flagged shipments through here as BMPE red flags. TRACIT profiled as key illicit trade corridor. Used by Colombian & Mexican cartels for trade-based money laundering.",
+    lx:10,ly:-10,anchor:"start"},
+
+  {name:"Margarita Island FTZ",lat:11.0,lon:-63.9,region:"carib",color:"#1D9E75",r:4.5,
+    desc:"Venezuelan duty-free island. U.S. Congressional testimony: Hezbollah operates training camps & smuggling networks here. Former Treasury official called it 'a center of gravity' for Hezbollah in the Western Hemisphere. DOJ alleges Venezuelan officials recruited Hezbollah/Hamas members for clandestine camps. 10,400+ Venezuelan passports issued to Lebanese/Syrian/Iranian nationals (2010–2019).",
+    lx:8,ly:-8,anchor:"start"},
+
+  {name:"Curacao FTZ",lat:12.17,lon:-68.98,region:"carib",color:"#1D9E75",r:4,
+    desc:"Dutch Caribbean free zone. In April 2009, 250 law enforcement officials arrested 17 suspects in a Hezbollah-linked drug ring shipping 2,000+ kg cocaine/year to Europe & Middle East. Proceeds funneled to Hezbollah via informal banking (Jamestown Foundation, RAND).",
+    lx:-8,ly:-10,anchor:"end"},
+
+  {name:"Trinidad & Tobago",lat:10.5,lon:-61.3,region:"carib",color:"#1D9E75",r:3.5,
+    desc:"Point Lisas free zone. 7 miles from Venezuela. State of emergency declared Jan 2025 over record narco-violence (61 homicides in Dec 2024 alone). Cocaine enters via small boats from Venezuela. 132 known coastal disembarkation points (Min. of National Security). U.S. State Dept: key transshipment location for cocaine to US/UK/Europe.",
+    lx:8,ly:12,anchor:"start"},
+
+  {name:"Kingston FTZ",lat:17.97,lon:-76.79,region:"carib",color:"#1D9E75",r:4,
+    desc:"Jamaica's main FTZ. 150+ unofficial coastal entry points. 1,500kg cocaine seized at Kingston Freeport Terminal (Jan 2023, $80M — Jamaica Constabulary Force). 538kg disguised as Cuban honey seized March 2025. Key corridor on Cartagena-to-US/UK cocaine route. Jamaica PM: 'increasingly important drug transshipment location.'",
+    lx:-8,ly:-8,anchor:"end"},
+
+  {name:"Manaus Free Zone",lat:-3.12,lon:-60.02,region:"latam",color:"#D85A30",r:4.5,
+    desc:"Brazil's largest FTZ, at the confluence of the Solimões & Negro rivers. UNODC: cocaine from Colombia/Peru arrives via river, is loaded onto cargo ships at Manaus heading to Africa & Europe. INTERPOL established Amazon-focused task force based here (Feb 2026). Brazilian govt (2025): criminal gangs (Red Command, PCC) now operate in 45% of Amazon municipalities. Over 900 drug routes transit the Amazon Basin.",
+    lx:8,ly:-8,anchor:"start"},
+
+  {name:"Tri-Border Area",lat:-25.5,lon:-54.6,region:"latam",color:"#D85A30",r:5.5,
+    desc:"Argentina-Brazil-Paraguay junction. FinCEN: Hezbollah generates revenue here through money laundering, narcotics trafficking, charcoal/oil smuggling, counterfeiting & illicit diamond trade. U.S. State Dept Rewards for Justice: $10M reward for info on Hezbollah financial networks in the TBA (May 2025). Active since the 1980s. Assad Barakat network sanctioned by U.S. Treasury.",
+    lx:8,ly:4,anchor:"start"},
+
+  {name:"Iquique FTZ",lat:-20.21,lon:-70.15,region:"latam",color:"#D85A30",r:4,
+    desc:"Chile's largest FTZ (ZOFRI). 1,700+ businesses, 30,000 jobs, trading with 70+ countries. U.S. State Dept INCSR flagged Chile's FTZs as 'largely unregulated' for AML. Major counterfeiting pipeline for Chinese goods to Bolivia/Paraguay. FBI-prompted takedown of 'Clan Cheng' ($200M fraud) in 2026. Chilean prosecutors investigating Lebanese-linked firms for Hezbollah money laundering (2024).",
+    lx:-8,ly:4,anchor:"end"},
+
+  {name:"Buenaventura",lat:3.88,lon:-77.02,region:"latam",color:"#D85A30",r:4.5,
+    desc:"Colombia's Pacific port. DOJ: Clan del Golfo's primary income is cocaine trafficking — controlled deliveries of 191kg & 172kg made in Cartagena/Valledupar (2018). Key transit for cocaine to Central America & Mexico. Crisis Group identifies Buenaventura as one of Latin America's worst-hit drug trafficking hotspots with extreme urban violence.",
+    lx:-8,ly:4,anchor:"end"},
+
+  {name:"Cartagena FTZ",lat:10.39,lon:-75.51,region:"latam",color:"#D85A30",r:4,
+    desc:"Colombia's Caribbean port zone. ICE: traffickers used parasitic devices on cargo ship hulls at Cartagena, with insider access to port scheduling data. Crisis Group: established Cartagena-to-Miami cocaine corridor. FinCEN: Black Market Peso Exchange & trade-based money laundering node. DEA agent (Irizarry) corruption case exposed deep penetration of port logistics.",
+    lx:-8,ly:4,anchor:"end"},
+
+  {name:"Lome Free Zone",lat:6.13,lon:1.22,region:"wafrica",color:"#534AB7",r:4.5,
+    desc:"Togo's port zone. On the Lagos–Cotonou–Lomé–Accra trafficking corridor (~500km, UNODC). FATF (2016): Gulf of Guinea & Sahel trafficking routes are 'so heavily used' they finance terrorist groups including Boko Haram & AQIM. U.S. Treasury identified Togo-Ghana border in a Hezbollah-linked drug/cash laundering route — products moved across borders to Accra airport, cash shipped via MEA to Lebanon. Lomé airport flagged by UNODC for cocaine couriers to Europe.",
+    lx:-8,ly:-10,anchor:"end"},
+
+  {name:"Lagos Free Zone",lat:6.45,lon:3.39,region:"wafrica",color:"#534AB7",r:5,
+    desc:"Nigeria's commercial hub. UNODC: Lagos airport is a major transit point for cocaine couriers. GI-TOC (2025): up to 30% of Europe's cocaine transits West Africa. FATF (2016): Boko Haram finances through extortion, ransom, cattle rustling & trade in goods; ISWAP (ISIS affiliate, 3,500–5,000 fighters — UN Security Council) exploits cash economy via kidnapping & illegal levies. Nigerian FIU detected ISIS-linked crypto transfers to two Nigerians ($19,900 & $9,900). U.S. Treasury: Hezbollah used-car/cash laundering through West African networks.",
+    lx:8,ly:12,anchor:"start"},
+
+  {name:"Dakar FTZ",lat:14.69,lon:-17.44,region:"wafrica",color:"#534AB7",r:4.5,
+    desc:"Senegal's port zone. GI-TOC (Sept 2025): Port of Dakar is West Africa's 'most strategic hub' for cocaine exports to Spain/Europe. Balkan organized crime groups (Kavač, Škaljari clans) increasingly active. On 'Highway 10' — the shortest transatlantic route from Brazil (~2,500km). FATF (2016): Sahel & Gulf of Guinea trafficking routes used to finance Boko Haram & AQIM. GIABA (West African AML body) headquartered in Dakar. ~30,000 Lebanese residents. HSI provided TBML training to Senegalese law enforcement (INCSR 2025).",
+    lx:8,ly:-10,anchor:"start"},
+
+  {name:"Abidjan FTZ",lat:5.36,lon:-4.01,region:"wafrica",color:"#534AB7",r:4.5,
+    desc:"Ivory Coast. Est. 60,000–300,000 Lebanese residents (largest Lebanese diaspora in West Africa). FDD: Hezbollah has infiltrated diaspora institutions from Abidjan to Foz do Iguaçu since the 1980s. 1.2 tonnes of cocaine destined for Abidjan seized at Santos port, Brazil (2018). UNODC: Abidjan is now a destination market, not just transit, with growing local user communities.",
+    lx:-8,ly:12,anchor:"end"},
+
+  {name:"Accra FTZ",lat:5.56,lon:-0.19,region:"wafrica",color:"#534AB7",r:3.5,
+    desc:"Ghana's free zone. U.S. Treasury: Accra airport identified as endpoint in Hezbollah-linked used-car/cash laundering scheme (drugs transported across Togo-Ghana border, cash flown to Lebanon). Ghana govt survey (2021): cocaine is most-abused drug in Greater Accra. UNODC: Ghana is a significant synthetic drug producer & cocaine transit zone to UK. Host of 2025 'Accra Call to Action' drug summit.",
+    lx:8,ly:-4,anchor:"start"},
+
+  {name:"Port of Montreal",lat:45.5,lon:-73.56,region:"north",color:"#378ADD",r:5,
+    desc:"Canada. Canadian govt 2025 risk report: Port of Montreal is a 'known link where luxury vehicles are shipped to Lebanon, financially supporting Hezbollah.' Operation Vector (2024): 598 stolen vehicles worth $34.5M seized (OPP/CBSA). In 2023, 1,200 stolen vehicles recovered at the port. DEA (2008): identified Hezbollah operatives in Montreal via wiretap evidence from Colombian narco-kingpins.",
+    lx:8,ly:-10,anchor:"start"},
+
+  {name:"Halifax Port",lat:44.65,lon:-63.57,region:"north",color:"#378ADD",r:4,
+    desc:"Canada. CBSA (March 2024): 1,556kg cocaine seized, valued at $194M, from a container en route from California to Europe via Panama Canal. DEA identified Halifax as part of Hezbollah 'leadership cells for Western Hemisphere operations' (2008 briefing to RCMP). Canadian 2025 risk assessment confirmed Hezbollah's use of both licit and illicit channels in Canada.",
+    lx:8,ly:6,anchor:"start"},
+
+  {name:"Miami FTZ",lat:25.76,lon:-80.19,region:"north",color:"#378ADD",r:4.5,
+    desc:"US gateway to Latin America & Caribbean. FinCEN: primary hub for the Black Market Peso Exchange — 'one of the most extensive money laundering methodologies' in the Western Hemisphere. FinCEN Advisory (2010): flagged shipments of electronics, auto parts & precious metals from Miami to FTZs as TBML red flags. DOJ: $50M+ in drug proceeds laundered through BMPE via Miami bank accounts (Operation Mallorca).",
+    lx:8,ly:-10,anchor:"start"},
+
+  {name:"Rotterdam Port",lat:51.92,lon:4.48,region:"north",color:"#378ADD",r:4,
+    desc:"Europe's largest port. EU member states reported a record 356 tonnes of cocaine seized in 2022, with Belgium, Spain & the Netherlands reporting highest volumes. Europol: key entry point for Latin American cocaine. Crisis Group: established trafficking corridor from Buenaventura & Cartagena. Multiple 'super cartel' arrests linked to Rotterdam trafficking operations.",
+    lx:8,ly:-8,anchor:"start"},
+
+  {name:"Port of Beirut",lat:33.9,lon:35.5,region:"mideast",color:"#D4537E",r:5,
+    desc:"Lebanon. Hezbollah's home base. FinCEN (2024): Hezbollah generates ~$1B annually from Iranian support, international businesses, donor networks, corruption & money laundering. U.S. Treasury: destination for stolen vehicles from Canada, laundered funds & trade flows from Latin America, West Africa & the Caribbean. Multiple OFAC designations target Hezbollah financiers based in Lebanon.",
+    lx:8,ly:-10,anchor:"start"},
+
+  {name:"Dubai / Jebel Ali",lat:25.0,lon:55.1,region:"mideast",color:"#D4537E",r:4.5,
+    desc:"UAE free zone. FATF (2020): JAFZA accounts for 32% of UAE foreign investment & 24% of Dubai's GDP ($118B trade value) — yet only 99 financial intelligence requests from free zones over 5 years. U.S. State Dept INCSR: UAE listed as 'major money laundering country.' OFAC designated multiple Jebel Ali entities for Iran/Russia sanctions evasion (Bitubiz, Hennesea). U.S. Treasury (2022): OFAC sanctioned six individuals after UAE court convicted them for transferring $782,000 from Dubai to Boko Haram in Nigeria. Europol: European 'super cartel' leaders operated here. UAE removed from FATF grey list Feb 2024.",
+    lx:8,ly:6,anchor:"start"},
 ];
 
 const routes = [
@@ -376,7 +438,7 @@ function buildMap(world) {
       const pb = document.querySelector('[style*="position:relative"]').getBoundingClientRect();
       const bx = e.clientX - pb.left, by = e.clientY - pb.top;
       let left = bx + 14, top = by - 10;
-      if (left + 230 > w) left = bx - 244;
+      if (left + 280 > w) left = bx - 294;
       if (top + 100 > h) top = top - 80;
       if (top < 0) top = 10;
       tip.style.left = left + 'px'; tip.style.top = top + 'px';
