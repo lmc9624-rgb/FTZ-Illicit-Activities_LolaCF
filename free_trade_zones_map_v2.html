@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>lolacfinteractiveFTZmap-illicitactivities</title>
+  <meta name="description" content="lolacfinteractiveFTZmap-illicitactivities public interactive map of free trade zones and illicit activity routes.">
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --panel: #fbfaf7;
+      --land: #e8e6df;
+      --sea: #f4f3ef;
+      --border: #cccbc4;
+      --text: #4f4d47;
+      --muted: #6c6a63;
+      --route: rgba(0, 0, 0, 0.07);
+      --shadow: 0 14px 38px rgba(60, 56, 45, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1d1c19;
+        --panel: #23211e;
+        --land: #2a2a28;
+        --sea: #1a1a19;
+        --border: #3a3a37;
+        --text: #e5e1d8;
+        --muted: #b0afa8;
+        --route: rgba(255, 255, 255, 0.11);
+        --shadow: none;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 36px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid rgba(120, 114, 98, 0.12);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.5rem, 2vw, 2rem);
+      font-weight: 600;
+    }
+
+    .intro {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+
+    .map-wrap {
+      position: relative;
+    }
+
+    #map {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .tooltip-box {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.96);
+      color: #3f3b34;
+      border: 1px solid rgba(130, 122, 104, 0.2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      max-width: 250px;
+      line-height: 1.45;
+      z-index: 10;
+      box-shadow: 0 10px 24px rgba(60, 56, 45, 0.14);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .tooltip-box {
+        background: rgba(35, 33, 30, 0.97);
+        color: var(--text);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: none;
+      }
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 20px;
+      margin: 14px 0 6px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    #controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    #controls button {
+      appearance: none;
+      border: 1px solid rgba(120, 114, 98, 0.2);
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    #controls button.active {
+      background: rgba(55, 138, 221, 0.12);
+      border-color: rgba(55, 138, 221, 0.35);
+      color: #2f78bd;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #controls button.active {
+        color: #83bbff;
+      }
+    }
+
+    .note {
+      margin: 12px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <h1>Free Trade Zones and Port Network</h1>
+      <p class="note" style="margin-top:0;margin-bottom:10px;">Public page label: <strong>lolacfinteractiveFTZmap-illicitactivities</strong></p>
+      <p class="intro">Hover over a location for context. Click any point or label to open a live web search for that zone in a new tab.</p>
+
+      <div class="map-wrap">
+        <svg id="map" viewBox="0 0 680 520" aria-label="Map of free trade zones"></svg>
+        <div class="tooltip-box" id="tip" role="tooltip"></div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#D85A30"></div>Latin America</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1D9E75"></div>Caribbean / Central America</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div>West Africa</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>North America / Europe</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#D4537E"></div>Middle East</div>
+      </div>
+
+      <div id="controls" aria-label="Filter map regions">
+        <button class="active" onclick="filterZones('all', this)">All zones</button>
+        <button onclick="filterZones('latam', this)">Latin America</button>
+        <button onclick="filterZones('carib', this)">Caribbean</button>
+        <button onclick="filterZones('wafrica', this)">West Africa</button>
+        <button onclick="filterZones('north', this)">North America / EU</button>
+        <button onclick="filterZones('mideast', this)">Middle East</button>
+      </div>
+
+      <p class="note">This file is standalone HTML. Once hosted, the page itself will be your shareable web link.</p>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+  <script>
+    const zones = [
+      { name: "Colon Free Zone", lat: 9.35, lon: -79.9, region: "carib", color: "#1D9E75", r: 5.5, desc: "World's 2nd largest FTZ. Key transit for drugs, counterfeits. Bagdad & Calor Calor gangs operate nearby.", lx: 10, ly: -10, anchor: "start" },
+      { name: "Margarita Island FTZ", lat: 11.0, lon: -63.9, region: "carib", color: "#1D9E75", r: 4.5, desc: "Venezuelan free port. Hezbollah training operations reported. Maduro regime nexus.", lx: 8, ly: -8, anchor: "start" },
+      { name: "Curacao FTZ", lat: 12.17, lon: -68.98, region: "carib", color: "#1D9E75", r: 4, desc: "Dutch Caribbean free zone. Hezbollah drug ring busted here in 2009.", lx: -8, ly: -10, anchor: "end" },
+      { name: "Trinidad & Tobago", lat: 10.5, lon: -61.3, region: "carib", color: "#1D9E75", r: 3.5, desc: "Point Lisas free zone. Caribbean transit hub for narcotics.", lx: 8, ly: 12, anchor: "start" },
+      { name: "Kingston FTZ", lat: 17.97, lon: -76.79, region: "carib", color: "#1D9E75", r: 4, desc: "Jamaica's main FTZ. Transshipment point for Caribbean drug trade.", lx: -8, ly: -8, anchor: "end" },
+      { name: "Manaus Free Zone", lat: -3.12, lon: -60.02, region: "latam", color: "#D85A30", r: 4.5, desc: "Brazil's largest FTZ in the Amazon. Near Tri-Border Area networks.", lx: 8, ly: -8, anchor: "start" },
+      { name: "Tri-Border Area", lat: -25.5, lon: -54.6, region: "latam", color: "#D85A30", r: 5.5, desc: "Argentina-Brazil-Paraguay junction. Major Hezbollah fundraising & money laundering hub since 1980s.", lx: 8, ly: 4, anchor: "start" },
+      { name: "Iquique FTZ", lat: -20.21, lon: -70.15, region: "latam", color: "#D85A30", r: 4, desc: "Chile's northern FTZ. Hezbollah money launderer Assad Barakat spotted here in 2024.", lx: -8, ly: 4, anchor: "end" },
+      { name: "Buenaventura", lat: 3.88, lon: -77.02, region: "latam", color: "#D85A30", r: 4.5, desc: "Colombia's Pacific port. Key transit for Clan del Golfo cocaine & arms trafficking.", lx: -8, ly: 4, anchor: "end" },
+      { name: "Cartagena FTZ", lat: 10.39, lon: -75.51, region: "latam", color: "#D85A30", r: 4, desc: "Colombia's Caribbean port zone. Drug trafficking & trade-based money laundering hub.", lx: -8, ly: 4, anchor: "end" },
+      { name: "Lome Free Zone", lat: 6.13, lon: 1.22, region: "wafrica", color: "#534AB7", r: 4.5, desc: "Togo's port zone. West African transit point. Lebanese diaspora fundraising networks.", lx: -8, ly: -10, anchor: "end" },
+      { name: "Lagos Free Zone", lat: 6.45, lon: 3.39, region: "wafrica", color: "#534AB7", r: 5, desc: "Nigeria's commercial hub. Hezbollah & Lebanese diaspora networks active in West Africa.", lx: 8, ly: 12, anchor: "start" },
+      { name: "Dakar FTZ", lat: 14.69, lon: -17.44, region: "wafrica", color: "#534AB7", r: 4.5, desc: "Senegal's port zone. Significant Lebanese community. Drug transit point to Europe.", lx: 8, ly: -10, anchor: "start" },
+      { name: "Abidjan FTZ", lat: 5.36, lon: -4.01, region: "wafrica", color: "#534AB7", r: 4.5, desc: "Ivory Coast. Over 100,000 Lebanese residents. Key Hezbollah fundraising territory.", lx: -8, ly: 12, anchor: "end" },
+      { name: "Accra FTZ", lat: 5.56, lon: -0.19, region: "wafrica", color: "#534AB7", r: 3.5, desc: "Ghana's free zone. Growing role in West African trade corridors.", lx: 8, ly: -4, anchor: "start" },
+      { name: "Port of Montreal", lat: 45.5, lon: -73.56, region: "north", color: "#378ADD", r: 5, desc: "Canada. Known Hezbollah vehicle smuggling route to Lebanon. $34.5M in stolen cars seized in 2024.", lx: 8, ly: -10, anchor: "start" },
+      { name: "Halifax Port", lat: 44.65, lon: -63.57, region: "north", color: "#378ADD", r: 4, desc: "Canada. Identified as Hezbollah leadership cell location by DEA. $194M cocaine seizure in 2024.", lx: 8, ly: 6, anchor: "start" },
+      { name: "Miami FTZ", lat: 25.76, lon: -80.19, region: "north", color: "#378ADD", r: 4.5, desc: "US gateway to Latin America & Caribbean. Black market peso exchange hub.", lx: 8, ly: -10, anchor: "start" },
+      { name: "Rotterdam Port", lat: 51.92, lon: 4.48, region: "north", color: "#378ADD", r: 4, desc: "Europe's largest port. Major cocaine entry point from Latin America.", lx: 8, ly: -8, anchor: "start" },
+      { name: "Port of Beirut", lat: 33.9, lon: 35.5, region: "mideast", color: "#D4537E", r: 5, desc: "Lebanon. Hezbollah's home base. Destination for stolen vehicles, laundered funds & trade flows.", lx: 8, ly: -10, anchor: "start" },
+      { name: "Dubai / Jebel Ali", lat: 25.0, lon: 55.1, region: "mideast", color: "#D4537E", r: 4.5, desc: "UAE free zone. Global supercartel HQ. Major money laundering & gold trade nexus.", lx: 8, ly: 6, anchor: "start" }
+    ].map((zone) => ({
+      ...zone,
+      url: `https://www.google.com/search?q=${encodeURIComponent(zone.name + " free trade zone port illicit trade")}`
+    }));
+
+    const routes = [
+      { from: "Colon Free Zone", to: "Port of Beirut" },
+      { from: "Tri-Border Area", to: "Port of Beirut" },
+      { from: "Margarita Island FTZ", to: "Port of Beirut" },
+      { from: "Port of Montreal", to: "Port of Beirut" },
+      { from: "Lagos Free Zone", to: "Port of Beirut" },
+      { from: "Abidjan FTZ", to: "Port of Beirut" },
+      { from: "Colon Free Zone", to: "Miami FTZ" },
+      { from: "Buenaventura", to: "Colon Free Zone" },
+      { from: "Buenaventura", to: "Rotterdam Port" },
+      { from: "Port of Beirut", to: "Dubai / Jebel Ali" },
+      { from: "Dakar FTZ", to: "Rotterdam Port" },
+      { from: "Lagos Free Zone", to: "Dakar FTZ" },
+      { from: "Port of Montreal", to: "Rotterdam Port" },
+      { from: "Halifax Port", to: "Port of Montreal" }
+    ];
+
+    const svg = d3.select("#map");
+    const width = 680;
+    const height = 520;
+    const tooltip = document.getElementById("tip");
+    const projection = d3.geoNaturalEarth1().center([-15, 12]).scale(190).translate([width / 2, height / 2]);
+    const geoPath = d3.geoPath().projection(projection);
+
+    svg.append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "var(--sea)")
+      .attr("rx", 8);
+
+    const openLink = (url) => {
+      window.open(url, "_blank", "noopener,noreferrer");
+    };
+
+    const setTooltipPosition = (event) => {
+      const bounds = document.querySelector(".map-wrap").getBoundingClientRect();
+      const localX = event.clientX - bounds.left;
+      const localY = event.clientY - bounds.top;
+      let left = localX + 14;
+      let top = localY - 10;
+
+      if (left + 250 > bounds.width) left = localX - 264;
+      if (top + 110 > bounds.height) top -= 90;
+      if (top < 8) top = 8;
+
+      tooltip.style.left = left + "px";
+      tooltip.style.top = top + "px";
+    };
+
+    fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json")
+      .then((response) => response.json())
+      .then((world) => {
+        const land = topojson.feature(world, world.objects.countries);
+        svg.append("g")
+          .selectAll("path")
+          .data(land.features)
+          .join("path")
+          .attr("d", geoPath)
+          .attr("fill", "var(--land)")
+          .attr("stroke", "var(--border)")
+          .attr("stroke-width", 0.3);
+
+        const routeGroup = svg.append("g");
+        routes.forEach((route) => {
+          const from = zones.find((zone) => zone.name === route.from);
+          const to = zones.find((zone) => zone.name === route.to);
+          if (!from || !to) return;
+
+          const [x1, y1] = projection([from.lon, from.lat]);
+          const [x2, y2] = projection([to.lon, to.lat]);
+          const mx = (x1 + x2) / 2;
+          const my = (y1 + y2) / 2 - Math.abs(x2 - x1) * 0.15;
+
+          routeGroup.append("path")
+            .attr("d", `M${x1},${y1} Q${mx},${my} ${x2},${y2}`)
+            .attr("fill", "none")
+            .attr("stroke", "var(--route)")
+            .attr("stroke-width", 1)
+            .attr("stroke-dasharray", "5,4")
+            .attr("class", "route-line")
+            .attr("data-from", route.from)
+            .attr("data-to", route.to);
+        });
+
+        const pointGroup = svg.append("g");
+        const labelGroup = svg.append("g");
+
+        zones.forEach((zone) => {
+          const [cx, cy] = projection([zone.lon, zone.lat]);
+          if (cx < 0 || cx > width || cy < 0 || cy > height) return;
+
+          const point = pointGroup.append("a")
+            .attr("href", zone.url)
+            .attr("target", "_blank")
+            .attr("rel", "noopener noreferrer")
+            .attr("data-region", zone.region)
+            .attr("data-name", zone.name)
+            .style("cursor", "pointer");
+
+          point.append("circle")
+            .attr("cx", cx)
+            .attr("cy", cy)
+            .attr("r", zone.r + 4)
+            .attr("fill", zone.color)
+            .attr("opacity", 0.15);
+
+          point.append("circle")
+            .attr("cx", cx)
+            .attr("cy", cy)
+            .attr("r", zone.r)
+            .attr("fill", zone.color)
+            .attr("opacity", 0.92)
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 0.8);
+
+          const lx = cx + zone.lx;
+          const ly = cy + zone.ly;
+          const label = labelGroup.append("a")
+            .attr("href", zone.url)
+            .attr("target", "_blank")
+            .attr("rel", "noopener noreferrer")
+            .attr("data-region", zone.region)
+            .attr("data-name", zone.name)
+            .style("cursor", "pointer");
+
+          label.append("line")
+            .attr("x1", cx)
+            .attr("y1", cy)
+            .attr("x2", lx)
+            .attr("y2", ly)
+            .attr("stroke", "var(--muted)")
+            .attr("stroke-width", 0.4)
+            .attr("opacity", 0.5);
+
+          label.append("text")
+            .attr("x", zone.anchor === "end" ? lx - 3 : lx + 3)
+            .attr("y", ly)
+            .attr("text-anchor", zone.anchor)
+            .attr("dominant-baseline", "central")
+            .attr("font-size", "9.5px")
+            .attr("font-family", "Georgia, 'Times New Roman', serif")
+            .attr("fill", "var(--muted)")
+            .attr("font-weight", 400)
+            .text(zone.name);
+
+          const activateZone = () => {
+            tooltip.innerHTML = `<div style="font-weight:600;margin-bottom:3px;color:${zone.color}">${zone.name}</div>${zone.desc}<div style="margin-top:6px;color:#7b7669">Click to open the web link</div>`;
+            tooltip.style.opacity = 1;
+            svg.selectAll(".route-line").each(function () {
+              const line = d3.select(this);
+              if (line.attr("data-from") === zone.name || line.attr("data-to") === zone.name) {
+                line.attr("stroke", zone.color).attr("stroke-width", 1.8).attr("stroke-opacity", 0.55);
+              }
+            });
+            labelGroup.select(`[data-name="${zone.name}"] text`).attr("font-weight", 600).attr("font-size", "11px");
+            point.selectAll("circle").filter((d, i) => i === 1).attr("r", zone.r + 2);
+          };
+
+          const deactivateZone = () => {
+            tooltip.style.opacity = 0;
+            svg.selectAll(".route-line").attr("stroke", "var(--route)").attr("stroke-width", 1).attr("stroke-opacity", 1);
+            labelGroup.select(`[data-name="${zone.name}"] text`).attr("font-weight", 400).attr("font-size", "9.5px");
+            point.selectAll("circle").filter((d, i) => i === 1).attr("r", zone.r);
+          };
+
+          point.on("mouseenter", function (event) {
+            activateZone();
+            setTooltipPosition(event);
+          }).on("mousemove", setTooltipPosition)
+            .on("mouseleave", deactivateZone)
+            .on("click", function (event) {
+              event.preventDefault();
+              openLink(zone.url);
+            });
+
+          label.on("mouseenter", function (event) {
+            activateZone();
+            setTooltipPosition(event);
+          }).on("mousemove", setTooltipPosition)
+            .on("mouseleave", deactivateZone)
+            .on("click", function (event) {
+              event.preventDefault();
+              openLink(zone.url);
+            });
+        });
+      })
+      .catch((error) => {
+        console.error("Map data failed to load:", error);
+        tooltip.innerHTML = "The base map could not load. Check your internet connection or host the world atlas JSON locally.";
+        tooltip.style.opacity = 1;
+        tooltip.style.left = "16px";
+        tooltip.style.top = "16px";
+      });
+
+    window.filterZones = function (region, button) {
+      document.querySelectorAll("#controls button").forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      svg.selectAll("a[data-region]").each(function () {
+        const element = d3.select(this);
+        const visible = region === "all" || element.attr("data-region") === region;
+        element.transition().duration(250).attr("opacity", visible ? 1 : 0.08);
+      });
+
+      svg.selectAll(".route-line").transition().duration(250).attr("opacity", region === "all" ? 1 : 0.15);
+    };
+  </script>
+</body>
+</html>
